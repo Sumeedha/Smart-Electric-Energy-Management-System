@@ -73,7 +73,9 @@ Smart-Electric-Energy-Management-System/
 ## **📊 Energy Cost Formula**
 
 Power (W)   = Voltage × Current
+
 Energy (kWh) = Power × Time (hours) / 1000
+
 Cost (₹)     = Energy × Tariff
 
 
