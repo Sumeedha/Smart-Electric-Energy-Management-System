@@ -23,23 +23,41 @@ It uses **ESP32 with sensors & relays**, **MQTT for communication**, **Firebase 
 ## **📂 Repository Structure**
 Smart-Electric-Energy-Management-System/
 ├── code/
+
 │ ├── esp32/
+
 │ │
+
 │ └── flutter_app/
+
 │ ├── lib/
+
 │ │ ├── main.dart
+
 │ │ ├── services/mqtt_service.dart
+
 │ │ └── pages/
+
 │ │ ├── dashboard.dart
+
 │ │ ├── rooms.dart
+
 │ │ ├── analysis.dart
+
 │ │ └── notifications.dart
+
 │
+
 ├── docs/
+
 │ ├── SEEMS_Document.pdf
+
 │ └── demo_video.mp4
+
 │
+
 ├── README.md
+
 └── LICENSE
 
 ---
@@ -58,4 +76,4 @@ Energy (kWh) = Power × Time (hours) / 1000
 Cost (₹)     = Energy × Tariff
 
 🎥 Demo
-[View Project Demo](
+[View Project Demo](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS%20_output.mp4)
