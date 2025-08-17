@@ -71,14 +71,17 @@ Smart-Electric-Energy-Management-System/
 5. **SIM900 GSM module** allows SMS-based appliance control in areas without internet.  
 
 ## **📊 Energy Cost Formula**
-```dart
+
 Power (W)   = Voltage × Current
 Energy (kWh) = Power × Time (hours) / 1000
 Cost (₹)     = Energy × Tariff
 
-🎥 Demo
-[View Project Demo](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS%20_output%20(1)%20(1).mp4)
-[Read Full Project Report](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS_Document.pdf.pdf)
+
+## **🎥 Demo**
+
+📺 [**View Project Demo**](docs/demo_video.mp4)  
+📄 [**Read Full Project Report**](docs/SEEMS_Document.pdf)  
+
 
 ## **🚀 Future Enhancements**
 
