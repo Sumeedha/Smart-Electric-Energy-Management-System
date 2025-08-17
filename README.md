@@ -23,11 +23,8 @@ It uses **ESP32 with sensors & relays**, **MQTT for communication**, **Firebase 
 ## **📂 Repository Structure**
 Smart-Electric-Energy-Management-System/
 ├── code/
-
 │ ├── esp32/
-
 │ │
-
 │ └── flutter_app/
 
 │ ├── lib/
