@@ -1,1 +1,147 @@
+#include <WiFi.h>
+#include <PubSubClient.h>
 
+// Wi‑Fi credentials
+const char* ssid = "Set up wifi";
+const char* password = "Password";
+
+// MQTT Broker settings
+const char* mqtt_server = "test.mosquitto.org";
+const int mqtt_port = 1883;
+
+// Room and appliance setup
+String room = "Hall";
+String appliances[] = {"Switch1", "Switch2", "Switch3", "Switch4"};
+
+// MQTT topics for control, schedule, and metrics
+String controlTopics[4];
+String scheduleTopics[4];
+String currentTopics[4];
+String powerTopics[4];
+String costTopics[4];
+String voltageTopic = "home/" + room + "/voltage";
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+// Relay and sensor pins
+const int relayPins[4] = {12, 14, 27, 26};      // Example GPIO pins
+const int currentSensorPins[4] = {A1, A2, A3, A4};
+const int voltageSensorPin = A0;
+
+void setupTopics() {
+  for (int i = 0; i < 4; i++) {
+    controlTopics[i] = "home/" + room + "/" + appliances[i];
+    scheduleTopics[i] = controlTopics[i] + "/schedule";
+    currentTopics[i] = "home/" + room + "/" + appliances[i] + "/current";
+    powerTopics[i] = "home/" + room + "/" + appliances[i] + "/power";
+    costTopics[i] = "home/" + room + "/" + appliances[i] + "/cost";
+  }
+}
+
+void setup_wifi() {
+  delay(10);
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  String topicStr = topic;
+  String message;
+  for (unsigned int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+
+  Serial.print("Message arrived [");
+  Serial.print(topicStr);
+  Serial.print("]: ");
+  Serial.println(message);
+
+  for (int i = 0; i < 4; i++) {
+    if (topicStr == controlTopics[i]) {
+      digitalWrite(relayPins[i], message == "ON" ? HIGH : LOW);
+      Serial.printf("Relay %d %s\n", i + 1, message == "ON" ? "ON" : "OFF");
+    } else if (topicStr == scheduleTopics[i]) {
+      Serial.printf("Schedule command received for %s: %s\n", appliances[i].c_str(), message.c_str());
+    }
+  }
+}
+
+void reconnect() {
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    String clientId = "ESP32Client-" + String(random(0xffff), HEX);
+    if (client.connect(clientId.c_str())) {
+      Serial.println(" connected");
+      for (int i = 0; i < 4; i++) {
+        client.subscribe(controlTopics[i].c_str());
+        client.subscribe(scheduleTopics[i].c_str());
+      }
+    } else {
+      Serial.print(" failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" trying again in 5 seconds");
+      delay(5000);
+    }
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  setupTopics();
+  for (int i = 0; i < 4; i++) {
+    pinMode(relayPins[i], OUTPUT);
+    digitalWrite(relayPins[i], LOW);
+  }
+  setup_wifi();
+  client.setServer(mqtt_server, mqtt_port);
+  client.setCallback(callback);
+}
+
+float readVoltage() {
+  int raw = analogRead(voltageSensorPin);
+  float voltage = (raw * 3.3 / 4095.0) * (220.0 / 0.7); // Calibrated mapping
+  return voltage;
+}
+
+float readCurrent(int pin) {
+  int raw = analogRead(pin);
+  float voltage = raw * 3.3 / 4095.0;
+  float current = (voltage - 2.5) / 0.066; // ACS712 30A version: 66mV/A
+  return abs(current); // Return positive current
+}
+
+void loop() {
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+
+  static unsigned long lastPublish = 0;
+  if (millis() - lastPublish > 5000) {
+    lastPublish = millis();
+    
+    float voltage = readVoltage();
+    client.publish(voltageTopic.c_str(), String(voltage).c_str());
+
+    for (int i = 0; i < 4; i++) {
+      float current = readCurrent(currentSensorPins[i]);
+      float power = voltage * current;
+      float cost = power * 0.15;
+
+      client.publish(currentTopics[i].c_str(), String(current).c_str());
+      client.publish(powerTopics[i].c_str(), String(power).c_str());
+      client.publish(costTopics[i].c_str(), String(cost).c_str());
+    }
+
+    Serial.println("Published voltage, current, power, and cost metrics");
+  }
+}
