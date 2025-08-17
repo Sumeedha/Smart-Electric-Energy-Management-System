@@ -22,9 +22,13 @@ It uses **ESP32 with sensors & relays**, **MQTT for communication**, **Firebase 
 
 ## **📂 Repository Structure**
 Smart-Electric-Energy-Management-System/
+
 ├── code/
+
 │ ├── esp32/
+
 │ │
+
 │ └── flutter_app/
 
 │ ├── lib/
@@ -73,4 +77,26 @@ Energy (kWh) = Power × Time (hours) / 1000
 Cost (₹)     = Energy × Tariff
 
 🎥 Demo
-[View Project Demo](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS%20_output.mp4)
+[View Project Demo](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS%20_output%20(1)%20(1).mp4)
+[Read Full Project Report](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS_Document.pdf.pdf)
+
+## **🚀 Future Enhancements**
+
+- 🎙️ **Voice control with Google Assistant / Alexa**  
+- 🤖 **AI-based usage predictions (TensorFlow Lite)**  
+- 🔔 **Push Notifications via Firebase Cloud Messaging (FCM)**  
+- ☀️ **Integration with solar energy monitoring**  
+
+---
+
+## **👥 Contributors**
+
+This project was collaboratively developed by **4 members**:  
+- **Sumeedha**  
+- **Member 2**  
+- **Member 3**  
+- **Member 4**  
+
+📜 License
+
+This project is licensed under the MIT License.
