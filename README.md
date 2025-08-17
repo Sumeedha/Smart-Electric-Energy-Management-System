@@ -79,8 +79,8 @@ Cost (₹)     = Energy × Tariff
 
 ## **🎥 Demo**
 
-📺 [**View Project Demo**](docs/demo_video.mp4)  
-📄 [**Read Full Project Report**](docs/SEEMS_Document.pdf)  
+[**View Project Demo**]([docs/demo_video.mp4](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS%20_output%20(1)%20(1).mp4))  
+📄 [**Read Full Project Report**]([docs/SEEMS_Document.pdf](https://github.com/Sumeedha/Smart-Electric-Energy-Management-System/blob/main/docs/SEEMS%20_output.mp4))  
 
 
 ## **🚀 Future Enhancements**
